@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Students Info</string>
+    <string name="search_mode"> Name</string>
+</resources>
