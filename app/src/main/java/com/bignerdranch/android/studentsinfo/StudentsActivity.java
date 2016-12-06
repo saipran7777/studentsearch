@@ -1,5 +1,6 @@
 package com.bignerdranch.android.studentsinfo;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -42,7 +44,7 @@ public class StudentsActivity extends FragmentActivity implements AdapterView.On
     private AutoCompleteTextView findStudent;
     ArrayList<String> studentSuggestion = new ArrayList<>(25);
     ArrayAdapter<String> adapter;
-    int flag = 0;//0 if by name 1 if roll no
+    int flag = 0;//0 if search by name, 1 if roll no
     ListView listView;
 
     @Override
@@ -50,6 +52,9 @@ public class StudentsActivity extends FragmentActivity implements AdapterView.On
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_students);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar1);
+        toolbar.setTitle("Student Search");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.cardview_light_background));
 
         listView = (ListView) findViewById(R.id.list_view_suggestion);
 
@@ -87,9 +92,10 @@ public class StudentsActivity extends FragmentActivity implements AdapterView.On
             public void afterTextChanged(Editable s) {
                 Log.d("afterTextChange", s.toString());
                 if (flag == 0 && s.length() > 2) doMySearchByName(s.toString());
-                else if(flag == 0) {
+                else if (flag == 0) {
                     studentSuggestion.clear();
-                    adapter.notifyDataSetChanged();}
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
         findStudent.setOnItemClickListener(this);
@@ -100,7 +106,6 @@ public class StudentsActivity extends FragmentActivity implements AdapterView.On
                                                       if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                                                           final Editable selection = findStudent.getText();
 
-                                                          findStudent.setText("");
                                                           InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                                           imm.hideSoftInputFromWindow(findStudent.getWindowToken(), 0);
 
@@ -115,20 +120,19 @@ public class StudentsActivity extends FragmentActivity implements AdapterView.On
 
         );
 
-
-        final TextView searchMode = (TextView) findViewById(R.id.search_mode);
-
         Switch searchSwitch = (Switch) findViewById(R.id.search_switch);
         searchSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    // The toggle is enabled
+                    // The toggle is enabled: ROLL NUMBER
+                    TextView textView = (TextView) findViewById(R.id.search_results_title);
+                    textView.setVisibility(View.GONE);
                     flag = 1;
-                    searchMode.setText("Search by roll number");
                 } else {
-                    // The toggle is disabled
+                    // The toggle is disabled: NAME
+                    TextView textView = (TextView) findViewById(R.id.search_results_title);
+                    textView.setVisibility(View.VISIBLE);
                     flag = 0;
-                    searchMode.setText("Search by student name");
                 }
             }
         });
@@ -201,7 +205,10 @@ public class StudentsActivity extends FragmentActivity implements AdapterView.On
     }
 
     public void doMySearchByRoll(String query) {
-
+        final ProgressDialog pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Getting data...");
+        pDialog.show();
+        pDialog.setCancelable(false);
         final RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("https")//https://students.iitm.ac.in/studentsapp/map/get_location.php?
@@ -244,10 +251,12 @@ public class StudentsActivity extends FragmentActivity implements AdapterView.On
                     intent.putExtra("hostel", hostel);
                     intent.putExtra("roomNo", roomNo);
                     intent.putExtra("photo", photo);
+                    pDialog.dismiss();
                     startActivity(intent);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    pDialog.dismiss();
                     Toast.makeText(getApplicationContext(), "No result found!\n" + e, Toast.LENGTH_SHORT).show();
 
                 }
@@ -257,6 +266,7 @@ public class StudentsActivity extends FragmentActivity implements AdapterView.On
 
             @Override
             public void onErrorResponse(VolleyError error) {
+                pDialog.dismiss();
                 Toast.makeText(getApplicationContext(), "error response " + error, Toast.LENGTH_SHORT).show();
 
             }
@@ -265,7 +275,10 @@ public class StudentsActivity extends FragmentActivity implements AdapterView.On
     }
 
     public void goToDetails(String query) {
-
+        final ProgressDialog pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Getting data...");
+        pDialog.show();
+        pDialog.setCancelable(false);
         final RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
         Uri.Builder builder = new Uri.Builder();
@@ -312,10 +325,12 @@ public class StudentsActivity extends FragmentActivity implements AdapterView.On
                     intent.putExtra("hostel", hostel);
                     intent.putExtra("roomNo", roomNo);
                     intent.putExtra("photo", photo);
+                    pDialog.dismiss();
                     startActivity(intent);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    pDialog.dismiss();
                     Toast.makeText(getApplicationContext(), "No result found!\n" + e, Toast.LENGTH_SHORT).show();
 
                 }
@@ -325,6 +340,7 @@ public class StudentsActivity extends FragmentActivity implements AdapterView.On
 
             @Override
             public void onErrorResponse(VolleyError error) {
+                pDialog.dismiss();
                 Toast.makeText(getApplicationContext(), "error response " + error, Toast.LENGTH_SHORT).show();
 
             }

@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Students Info</string>
+    <string name="app_name">Students Search</string>
     <string name="search_mode"> Name</string>
 </resources>

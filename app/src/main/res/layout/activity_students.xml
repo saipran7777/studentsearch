@@ -3,8 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.bignerdranch.android.studentsinfo.StudentsActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar1"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
     <AutoCompleteTextView
         android:id="@+id/search_view"
@@ -18,41 +28,57 @@
         android:drawablePadding="8dp"
         android:hint="Search students"
         android:imeOptions="actionSearch"
-        android:inputType="textAutoComplete"
+        android:inputType="textPersonName"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:textSize="16sp" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal">
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Search by"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
 
         <TextView
-            android:id="@+id/search_mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="Search by name"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="16sp" />
+            android:layout_marginRight="8dp"
+            android:text="Name" />
 
         <Switch
             android:id="@+id/search_switch"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="8dp" />
+            android:layout_marginLeft="8dp"
+            android:text="Roll number" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/search_results_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Search results"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
 
     <ListView
         android:id="@+id/list_view_suggestion"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="16dp" />
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>
