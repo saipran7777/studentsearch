@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Students Search</string>
     <string name="search_mode"> Name</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
